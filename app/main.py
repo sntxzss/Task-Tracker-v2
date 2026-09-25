@@ -28,9 +28,9 @@ class Task:
     def uncomplete(self):
         self.completed = False
 
-tasks = data.load_tasks()
-print(tasks)
-
+    def load_tasks(self):
+        for task_list in data.tasks:
+            print(task_list)
     
 
     
