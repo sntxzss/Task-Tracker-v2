@@ -49,6 +49,9 @@ class Task:
         self.to_storage["description"] = str(input("Enter description:"))
         self.to_storage["status"] = self.task_status.PENDING
         self.to_storage["priority"] = input(("Enter your priority (LOW/MEDIUM/HIGH/URGENT): "))
+        self.to_storage["completed"] = self.completed
+        self.to_storage["xp"] = if //кароче залежно від пріорітету воно має додати експу
+        
     
 
     
