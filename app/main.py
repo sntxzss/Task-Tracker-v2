@@ -1,4 +1,5 @@
 import storage as data
+from enum import Enum
 from exceptions import TaskNotFoundError
 
 class Task:
@@ -11,6 +12,16 @@ class Task:
         self.xp = xp
         self.completed = False
 
+    class task_status(Enum):
+      PENDING = "pending"
+      COMPLETED = "completed"
+
+    class task_priority(Enum):
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+    URGENT = "urgent"
+    
     def to_storage(self):
        return {
            "ID": self.id,
@@ -31,6 +42,13 @@ class Task:
     def load_tasks(self):
         for task_list in data.tasks:
             print(task_list)
+
+    def create_task(self):
+        self.to_storage["ID"] = len(data.tasks) + 1
+        self.to_storage["title"] = str(input("Enter title:"))
+        self.to_storage["description"] = str(input("Enter description:"))
+        self.to_storage["status"] = self.task_status.PENDING
+        self.to_storage["priority"] = input(("Enter your priority (LOW/MEDIUM/HIGH/URGENT): "))
     
 
     
