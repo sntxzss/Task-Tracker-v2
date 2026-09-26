@@ -65,3 +65,21 @@ class Task:
     tasks.append(task.to_storage())
     storage.save_tasks(tasks)
     print("Task created")
+
+    def load_tasks():
+       tasks = storage.load_tasks()
+
+       if not tasks:
+          print("No tasks")
+          return
+
+    for tasks in tasks:
+       print(
+            f"{task['id']}. "
+            f"{task['title']} | "
+            f"{task['priority']} | "
+            f"{task['status']} | "
+            f"{task['xp']} XP"
+        )
+
+    
