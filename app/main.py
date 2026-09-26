@@ -82,4 +82,13 @@ class Task:
             f"{task['xp']} XP"
         )
 
-    
+    def complete_task():
+     tasks = storage.load_tasks()
+     task_id = int(input("Task ID: "))
+     for task in tasks:
+        if task["id"] == task_id:
+            task["status"] = TaskStatus.COMPLETED.value
+            storage.save_tasks(tasks)
+            print("Task completed!")
+            return
+     raise TaskNotFoundError("Task not found.")
