@@ -1,21 +1,16 @@
 import storage
-
 from enum import Enum
-
 from exceptions import TaskNotFoundError
-
 
 class TaskStatus(Enum):
     PENDING = "pending"
     COMPLETED = "completed"
-
 
 class TaskPriority(Enum):
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
     URGENT = "urgent"
-
 
 XP_BY_PRIORITY = {
     TaskPriority.LOW: 10,
@@ -24,32 +19,33 @@ XP_BY_PRIORITY = {
     TaskPriority.URGENT: 50
 }
 
-
 class Task:
- def __init__(self, id, title, description, priority):
-    self.id = id
-    self.title = title
-    self.description = description
-    self.priority = priority
-    self.status = TaskStatus.PENDING
-    self.xp = XP_BY_PRIORITY[priority]
+    def __init__(self, id, title, description, priority):
+        self.id = id
+        self.title = title
+        self.description = description
+        self.priority = priority
+        self.status = TaskStatus.PENDING
+        self.xp = XP_BY_PRIORITY[priority]
 
- def complete(self):
-    self.status = TaskStatus.COMPLETED
+    def complete(self):
+        self.status = TaskStatus.COMPLETED
 
- def uncomplete(self):
-    self.status = TaskStatus.PENDING
+    def uncomplete(self):
+        self.status = TaskStatus.PENDING
 
- def to_storage(self):
-    return {
-        "id": self.id,
-        "title": self.title,
-        "description": self.description,
-        "priority": self.priority.value,
-        "status": self.status.value,
-        "xp": self.xp
-    }
- def create_task():
+    def to_storage(self):
+        return {
+            "id": self.id,
+            "title": self.title,
+            "description": self.description,
+            "priority": self.priority.value,
+            "status": self.status.value,
+            "xp": self.xp
+        }
+
+
+def create_task():
     tasks = storage.load_tasks()
     title = input("Title: ")
     description = input("Description: ")
@@ -64,17 +60,15 @@ class Task:
     )
     tasks.append(task.to_storage())
     storage.save_tasks(tasks)
-    print("Task created")
+    print("Task created!")
 
-    def load_tasks():
-       tasks = storage.load_tasks()
-
-       if not tasks:
-          print("No tasks")
-          return
-
-    for tasks in tasks:
-       print(
+def list_tasks():
+    tasks = storage.load_tasks()
+    if not tasks:
+        print("No tasks")
+        return
+    for task in tasks:
+        print(
             f"{task['id']}. "
             f"{task['title']} | "
             f"{task['priority']} | "
@@ -82,16 +76,16 @@ class Task:
             f"{task['xp']} XP"
         )
 
-    def complete_task():
-     tasks = storage.load_tasks()
-     task_id = int(input("Task ID: "))
-     for task in tasks:
+def complete_task():
+    tasks = storage.load_tasks()
+    task_id = int(input("Task ID: "))
+    for task in tasks:
         if task["id"] == task_id:
             task["status"] = TaskStatus.COMPLETED.value
             storage.save_tasks(tasks)
-            print("Task completed!")
+            print("Task completed")
             return
-     raise TaskNotFoundError("Task not found.")
+    raise TaskNotFoundError("Task not found")
 
 while True:
     print()
@@ -112,4 +106,4 @@ while True:
     elif choice == "4":
         break
     else:
-        print("Invalid choice.")
+        print("Invalid choice")
