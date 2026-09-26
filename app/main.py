@@ -1,59 +1,67 @@
-import storage as data
+import storage
+
 from enum import Enum
+
 from exceptions import TaskNotFoundError
 
-class Task:
-    def __init__(self, id, title, description, status, priority, xp):
-        self.id = id
-        self.title = title
-        self.description = description
-        self.status = status
-        self.priority = priority
-        self.xp = xp
-        self.completed = False
 
-    class task_status(Enum):
-      PENDING = "pending"
-      COMPLETED = "completed"
+class TaskStatus(Enum):
+    PENDING = "pending"
+    COMPLETED = "completed"
 
-    class task_priority(Enum):
+
+class TaskPriority(Enum):
     LOW = "low"
     MEDIUM = "medium"
     HIGH = "high"
     URGENT = "urgent"
-    
-    def to_storage(self):
-       return {
-           "ID": self.id,
-           "title": self.title,
-           "description": self.description,
-           "status": self.status,
-           "priority": self.priority,
-           "completed": self.completed,
-           "xp": self.xp
-       }
-    
-    def complete(self):
-        self.completed = True
 
-    def uncomplete(self):
-        self.completed = False
 
-    def load_tasks(self):
-        for task_list in data.tasks:
-            print(task_list)
+XP_BY_PRIORITY = {
+    TaskPriority.LOW: 10,
+    TaskPriority.MEDIUM: 20,
+    TaskPriority.HIGH: 30,
+    TaskPriority.URGENT: 50
+}
 
-    def create_task(self):
-        self.to_storage["ID"] = len(data.tasks) + 1
-        self.to_storage["title"] = str(input("Enter title:"))
-        self.to_storage["description"] = str(input("Enter description:"))
-        self.to_storage["status"] = self.task_status.PENDING
-        self.to_storage["priority"] = input(("Enter your priority (LOW/MEDIUM/HIGH/URGENT): "))
-        self.to_storage["completed"] = self.completed
-        self.to_storage["xp"] = if //кароче залежно від пріорітету воно має додати експу
-        
-    
 
-    
-    
-    
+class Task:
+ def __init__(self, id, title, description, priority):
+    self.id = id
+    self.title = title
+    self.description = description
+    self.priority = priority
+    self.status = TaskStatus.PENDING
+    self.xp = XP_BY_PRIORITY[priority]
+
+ def complete(self):
+    self.status = TaskStatus.COMPLETED
+
+ def uncomplete(self):
+    self.status = TaskStatus.PENDING
+
+ def to_storage(self):
+    return {
+        "id": self.id,
+        "title": self.title,
+        "description": self.description,
+        "priority": self.priority.value,
+        "status": self.status.value,
+        "xp": self.xp
+    }
+ def create_task():
+    tasks = storage.load_tasks()
+    title = input("Title: ")
+    description = input("Description: ")
+    priority_input = input("Priority (low/medium/high/urgent): ").lower()
+    priority = TaskPriority(priority_input)
+    new_id = len(tasks) + 1
+    task = Task(
+        new_id,
+        title,
+        description,
+        priority
+    )
+    tasks.append(task.to_storage())
+    storage.save_tasks(tasks)
+    print("Task created")
