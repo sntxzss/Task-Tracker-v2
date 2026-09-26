@@ -92,3 +92,24 @@ class Task:
             print("Task completed!")
             return
      raise TaskNotFoundError("Task not found.")
+
+while True:
+    print()
+    print("1. Create task")
+    print("2. List tasks")
+    print("3. Complete task")
+    print("4. Exit")
+    choice = input("Choose: ")
+    if choice == "1":
+        create_task()
+    elif choice == "2":
+        list_tasks()
+    elif choice == "3":
+        try:
+            complete_task()
+        except TaskNotFoundError as error:
+            print(error)
+    elif choice == "4":
+        break
+    else:
+        print("Invalid choice.")
